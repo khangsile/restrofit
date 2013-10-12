@@ -25,17 +25,22 @@ public class Restrofit {
 	}
 	
 	public static RestAdapter defaultAdapter(String baseURL) {
-		Gson gson = new GsonBuilder()
-    		.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-    		.registerTypeAdapter(Date.class, new DateTypeAdapter())
-    		.create();
+		Gson gson = Restrofit.defaultGson();
 
 		restAdapter = new RestAdapter.Builder()
     		.setServer(baseURL)
     		.setConverter(new GsonConverter(gson))
+    		.setRequestInterceptor(new JSONRequestInterceptor())
     		.build();
 		
 		return restAdapter;
+	}
+	
+	public static Gson defaultGson() {
+		return new GsonBuilder()
+			.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+			.registerTypeAdapter(Date.class, new DateTypeAdapter())
+			.create();
 	}
 	
 	public static void setSharedAdapter(RestAdapter adapter) {
