@@ -39,7 +39,7 @@ public class Restrofit {
 	public static Gson defaultGson() {
 		return new GsonBuilder()
 			.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-			.registerTypeAdapter(Date.class, new DateTypeAdapter())
+			.setDateFormat("yyyy-MM-DD'T'hh:mm:ss.sss'Z'") //Rails UTC DateFormat
 			.create();
 	}
 	
