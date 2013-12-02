@@ -1,14 +1,11 @@
 package com.llc.restrofit;
 
-import java.util.Date;
-
 import retrofit.RestAdapter;
 import retrofit.converter.GsonConverter;
 
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.internal.bind.DateTypeAdapter;
 
 /**
  * A Retrofit Adapter that stores the baseURL and allows you to reuse the same restAdapter as opposed
@@ -24,23 +21,23 @@ public class Restrofit {
 		return restAdapter;
 	}
 	
-	public static RestAdapter defaultAdapter(String baseURL) {
-		Gson gson = Restrofit.defaultGson();
+	public static RestAdapter.Builder defaultBuilder(String baseURL) {
+		Gson gson = Restrofit.defaultGsonBuilder().create();
 
-		restAdapter = new RestAdapter.Builder()
+		RestAdapter.Builder builder = new RestAdapter.Builder()
     		.setServer(baseURL)
     		.setConverter(new GsonConverter(gson))
-    		.setRequestInterceptor(new JSONRequestInterceptor())
-    		.build();
+    		.setRequestInterceptor(new JSONRequestInterceptor());
 		
-		return restAdapter;
+		restAdapter = builder.build();
+		
+		return builder;
 	}
 	
-	public static Gson defaultGson() {
+	public static GsonBuilder defaultGsonBuilder() {
 		return new GsonBuilder()
 			.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-			.setDateFormat("yyyy-MM-DD'T'hh:mm:ss.sss'Z'") //Rails UTC DateFormat
-			.create();
+			.setDateFormat("yyyy-MM-DD'T'hh:mm:ss.sss'Z'"); //Rails UTC DateFormat
 	}
 	
 	public static void setSharedAdapter(RestAdapter adapter) {
